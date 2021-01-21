@@ -1,21 +1,24 @@
 package com.am.marketing.view
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
 import com.am.marketing.R
 import com.am.marketing.viewmodel.TargetingSpecificsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TargetingSpecificsFragment : Fragment() {
 
     companion object {
         fun newInstance() = TargetingSpecificsFragment()
     }
 
-    private lateinit var viewModel: TargetingSpecificsViewModel
+    private val viewModel: TargetingSpecificsViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -24,8 +27,9 @@ class TargetingSpecificsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(TargetingSpecificsViewModel::class.java)
-        // TODO: Use the ViewModel
+        viewModel.targetingSpecific.observe(viewLifecycleOwner){
+            Toast.makeText(activity, it.toString(), Toast.LENGTH_LONG).show()
+        }
     }
 
 }

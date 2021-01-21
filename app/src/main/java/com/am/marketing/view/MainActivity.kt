@@ -2,27 +2,26 @@ package com.am.marketing.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import com.am.marketing.R
-import com.am.marketing.model.MarketingAPIClient
-import com.am.marketing.model.MarketingAPIService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // TODO: fix this
-        //for REST call test purposes
-        GlobalScope.launch(Dispatchers.Main) {
-            val marketing = MarketingAPIClient.apiClient().
-                                create(MarketingAPIService::class.java)
-                                .getMarketingResponse()
-            Toast.makeText(applicationContext, marketing.toString(), Toast.LENGTH_LONG).show()
-        }
+        val currentFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container)
 
+        if (currentFragment == null) {
+            val fragment = TargetingSpecificsFragment()
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fragment_container, fragment)
+                .commit()
+        }
     }
+
 }
