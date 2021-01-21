@@ -1,0 +1,83 @@
+{
+    "targetingSpecifics": [
+        {"id": 1, "label" : "Location", "channels": [1, 2, 3, 4, 5]},
+        {"id": 2, "label" : "Age", "channels": [1, 2, 3, 4, 5]},
+        {"id": 3, "label" : "Sex", "channels": [1, 2, 3, 4, 5]},
+        {"id": 4, "label" : "Spoken languages", "channels": [1, 3, 4]},
+        {"id": 5, "label" : "Events", "channels": [1, 3]},
+        {"id": 6, "label" : "Company", "channels": [2]},
+        {"id": 7, "label" : "Industry", "channels": [2, 6]},
+        {"id": 8, "label" : "Expertise", "channels": [2]},
+        {"id": 9, "label" : "Education", "channels": [2]},
+        {"id": 10, "label" : "Technology", "channels": [3]},
+        {"id": 11, "label" : "Interests", "channels": [4]},
+        {"id": 12, "label" : "Device", "channels": [5]},
+        {"id": 13, "label" : "Keywords", "channels": [5, 6]},
+        {"id": 14, "label" : "Similar products / services", "channels": [5]},
+        {"id": 15, "label" : "Hyperlinks", "channels": [6]}
+    ],
+    "channels": [
+        {"id": 1, "name": "Facebook", "campaigns": [
+            {"id": "1", "price" : 140, "minListings": 3, "maxListings": 8, "optimizations": 12, "benefits": [1, 2, 3, 4, 5, 6, 7]},
+            {"id": "2", "price" : 200, "minListings": 8, "maxListings": 15, "optimizations": 20, "benefits": [1, 2, 3, 4, 5, 6, 7, 8, 9]},
+            {"id": "3", "price" : 100, "minListings": 1, "maxListings": 3, "optimizations": 8, "benefits": [1, 2, 3, 4, 5, 6]},
+            {"id": "4", "price" : 75, "minListings": 1, "maxListings": 1, "optimizations": 8, "benefits": [1, 2, 3, 4]}
+        ]},
+        {"id": 2, "name": "Linkedin", "campaigns": [
+            {"id": "1", "price" : 150, "minListings": 5, "maxListings": 8, "benefits": [1, 2, 3, 14, 4]},
+            {"id": "2", "price" : 180, "minListings": 8, "maxListings": 10, "benefits": [1, 2, 3, 14, 4, 8]},
+            {"id": "3", "price" : 90, "minListings": 1, "maxListings": 3, "benefits": [1, 2, 3, 4]},
+            {"id": "4", "price" : 60, "minListings": 1, "maxListings": 2, "benefits": [1, 2, 3]}
+        ]},
+        {"id": 3, "name": "Twitter", "campaigns": [
+            {"id": "1", "price" : 170, "minListings": 5, "maxListings": 8, "benefits": [1, 10, 11, 3, 2, 4]},
+            {"id": "2", "price" : 250, "minListings": 8, "maxListings": 10, "benefits": [1, 10, 11, 3, 2, 4, 8]},
+            {"id": "3", "price" : 120, "minListings": 1, "maxListings": 3, "benefits": [1, 10, 11, 3, 2]},
+            {"id": "4", "price" : 80, "minListings": 1, "maxListings": 2, "benefits": [1, 10, 11, 3]}
+        ]},
+        {"id": 4, "name": "Instagram", "campaigns": [
+            {"id": "1", "price" : 180, "minListings": 5, "maxListings": 8, "optimizations": 4, "benefits": [1, 12, 13, 3]},
+            {"id": "2", "price" : 270, "minListings": 10, "maxListings": 12, "optimizations": 8, "benefits": [1, 12, 13, 14, 3, 8]},
+            {"id": "3", "price" : 130, "minListings": 1, "maxListings": 4, "optimizations": 2, "benefits": [1, 12, 3]},
+            {"id": "4", "price" : 80, "minListings": 1, "maxListings": 1, "benefits": [1, 3]}
+        ]},
+        {"id": 5, "name": "Google AdWords", "campaigns": [
+            {"id": "1", "price" : 150, "optimizations": 3, "benefits": [1, 15, 16, 3]},
+            {"id": "2", "price" : 230, "optimizations": 5, "benefits": [1, 15, 16, 4, 3, 8]},
+            {"id": "3", "price" : 90, "optimizations": 1, "benefits": [1, 15, 3]}
+        ]},
+        {"id": 6, "name": "SEO", "campaigns": [
+            {"id": "1", "price" : 170, "benefits": [17, 18, 19, 20, 21, 22, 23, 24, 13, 3]},
+            {"id": "2", "price" : 250, "benefits": [17, 18, 19, 20, 21, 22, 25, 23, 24, 13, 3]},
+            {"id": "3", "price" : 120, "benefits": [17, 18, 19, 20, 21, 22, 24, 3]},
+            {"id": "4", "price" : 80, "benefits": [17, 18, 19, 20, 22, 3]}
+        ]}
+    ], 
+    "campaignsBenefits": [
+        {"id" : 1, "description": "Campaign setup"},
+        {"id" : 2, "description": "Admin and optimising"},
+        {"id" : 3, "description": "Email support"},
+        {"id" : 4, "description": "Monthly reports"},
+        {"id" : 5, "description": "Install"},
+        {"id" : 6, "description": "Conversion monitoring"},
+        {"id" : 7, "description": "Landing page"},
+        {"id" : 8, "description": "Phone support"},
+        {"id" : 9, "description": "Remarketing"},
+        {"id" : 10, "description": "Campaign auctioning"},
+        {"id" : 11, "description": "Targeted tweets"},
+        {"id" : 12, "description": "Campaign testing"},
+        {"id" : 13, "description": "Campaign analysis"},
+        {"id" : 14, "description": "Monitoring"},
+        {"id" : 15, "description": "Content creation"},
+        {"id" : 16, "description": "Admin and monitoring"},
+        {"id" : 17, "description": "Scope setup"},
+        {"id" : 18, "description": "Market research"},
+        {"id" : 19, "description": "Keywords research"},
+        {"id" : 20, "description": "Content analysis"},
+        {"id" : 21, "description": "Hyperlinks analysis"},
+        {"id" : 22, "description": "Local SEO"},
+        {"id" : 23, "description": "Website optimisation"},
+        {"id" : 24, "description": "Backlink setup"},
+        {"id" : 25, "description": "Audit SEO"}
+    ]
+}
