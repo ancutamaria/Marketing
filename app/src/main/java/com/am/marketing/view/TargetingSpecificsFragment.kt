@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.am.marketing.R
@@ -18,14 +18,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class TargetingSpecificsFragment : Fragment() {
 
     private lateinit var tsRecyclerView: RecyclerView
-    private var adapter: BookAdapter? = null
+    private var adapter: TSAdapter? = null
     private lateinit var targetingSpecifics: List<TargetingSpecific>
 
     companion object {
         fun newInstance() = TargetingSpecificsFragment()
     }
 
-    private val viewModel: MarketingViewModel by viewModels()
+    private val viewModel: MarketingViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -47,7 +47,7 @@ class TargetingSpecificsFragment : Fragment() {
         for (targeting in targetingSpecifics){
             targeting.selected = mutableSet.contains(targeting.id)
         }
-        adapter = BookAdapter(targetingSpecifics)
+        adapter = TSAdapter(targetingSpecifics)
         tsRecyclerView.adapter = adapter
     }
 
@@ -55,7 +55,7 @@ class TargetingSpecificsFragment : Fragment() {
         val tsLabel: TextView = itemView.findViewById(R.id.targeting_specifics_item_label)
     }
 
-    private inner class BookAdapter(var tss: List<TargetingSpecific>)
+    private inner class TSAdapter(var tss: List<TargetingSpecific>)
         : RecyclerView.Adapter<TSHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TSHolder {
             val view = layoutInflater.inflate(R.layout.targeting_specifics_item, parent, false)
