@@ -38,7 +38,7 @@ class TargetingSpecificsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.targetingSpecific.observe(viewLifecycleOwner){
-            Toast.makeText(activity, it.toString(), Toast.LENGTH_LONG).show()
+//            Toast.makeText(activity, it.toString(), Toast.LENGTH_LONG).show()
             updateUI(it.targetingSpecifics)
         } }
 
