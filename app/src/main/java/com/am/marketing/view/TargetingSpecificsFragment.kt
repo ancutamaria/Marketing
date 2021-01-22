@@ -6,13 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.am.marketing.R
 import com.am.marketing.model.TargetingSpecific
-import com.am.marketing.viewmodel.TargetingSpecificsViewModel
+import com.am.marketing.viewmodel.MarketingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,12 +19,13 @@ class TargetingSpecificsFragment : Fragment() {
 
     private lateinit var tsRecyclerView: RecyclerView
     private var adapter: BookAdapter? = null
+    private lateinit var targetingSpecifics: List<TargetingSpecific>
 
     companion object {
         fun newInstance() = TargetingSpecificsFragment()
     }
 
-    private val viewModel: TargetingSpecificsViewModel by viewModels()
+    private val viewModel: MarketingViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -37,13 +37,16 @@ class TargetingSpecificsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.targetingSpecific.observe(viewLifecycleOwner){
-//            Toast.makeText(activity, it.toString(), Toast.LENGTH_LONG).show()
-            updateUI(it.targetingSpecifics)
-        } }
+        viewModel.marketing.observe(viewLifecycleOwner){
+            targetingSpecifics = it.targetingSpecifics
+            updateUI(targetingSpecifics, viewModel.selectedTargetings)
+        }
+    }
 
-
-    private fun updateUI(targetingSpecifics: List<TargetingSpecific>) {
+    private fun updateUI(targetingSpecifics: List<TargetingSpecific>, mutableSet: MutableSet<Int>) {
+        for (targeting in targetingSpecifics){
+            targeting.selected = mutableSet.contains(targeting.id)
+        }
         adapter = BookAdapter(targetingSpecifics)
         tsRecyclerView.adapter = adapter
     }
@@ -62,12 +65,27 @@ class TargetingSpecificsFragment : Fragment() {
         override fun onBindViewHolder(holder: TSHolder, position: Int) {
             val ts = tss[position]
             holder.apply {
-                tsLabel.text = ts.label
+                tsLabel.apply {
+                    text = ts.label
+                    setOnClickListener {
+                        ts.selected = !ts.selected
+                        viewModel.addSelectedTargetedSpecifics(ts.id, ts.selected)
+                        setSelectedItem(ts)
+                    }
+                    setSelectedItem(ts)
+                }
+
             }
         }
 
         override fun getItemCount() = tss.size
+    }
 
+    private fun TextView.setSelectedItem(ts: TargetingSpecific) {
+        if (ts.selected)
+            setTextColor(resources.getColor(R.color.purple_700))
+        else
+            setTextColor(resources.getColor(R.color.orange))
     }
 
 }

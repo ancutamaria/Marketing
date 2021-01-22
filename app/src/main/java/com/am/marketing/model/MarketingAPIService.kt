@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface MarketingAPIService {
 
-    @GET("226G")
+    @GET("/b/226G")
     fun getMarketing(): Call<Marketing>
 
 }

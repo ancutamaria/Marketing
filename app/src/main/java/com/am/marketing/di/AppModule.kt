@@ -19,7 +19,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRetrofit(gson: Gson) : Retrofit = Retrofit.Builder()
-        .baseUrl("https://jsonkeeper.com/b/")
+        .baseUrl("https://jsonkeeper.com/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 

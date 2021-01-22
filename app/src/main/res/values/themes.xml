@@ -22,7 +22,6 @@
         <item name="android:paddingRight">20dp</item>
         <item name="android:paddingTop">30dp</item>
         <item name="android:paddingBottom">30dp</item>
-        <item name="android:background">@color/orange_light</item>
     </style>
 
     <style name="MaterialCardViewCut" parent="">
