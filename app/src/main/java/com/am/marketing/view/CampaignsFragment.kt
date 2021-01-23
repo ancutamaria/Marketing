@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.am.marketing.R
@@ -21,7 +20,6 @@ class CampaignsFragment : Fragment() {
 
     private lateinit var champaignsRecyclerView: RecyclerView
     private var adapter: CampaignsAdapter? = null
-    private var checkedPosition = -1
 
     companion object {
         fun newInstance() = ChannelsFragment()

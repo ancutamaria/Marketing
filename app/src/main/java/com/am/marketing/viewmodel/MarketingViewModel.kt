@@ -11,12 +11,12 @@ class MarketingViewModel @ViewModelInject constructor(
     marketingRepository: MarketingRepository
 ) : ViewModel() {
 
+    val marketing: LiveData<Marketing> = marketingRepository.getMarketing()
+
     var selectedTargetings: MutableSet<Int> = mutableSetOf()
     var selectedCampaigns: MutableMap<Int, Int> = mutableMapOf()
     var eligibleChannels: MutableSet<Channel> = mutableSetOf()
     var selectedChannelID: Int = -1
-    val marketing: LiveData<Marketing> = marketingRepository.getMarketing()
-
 
     fun addSelectedTargetedSpecifics(id: Int, newSelected: Boolean) {
         if (newSelected){
@@ -34,6 +34,24 @@ class MarketingViewModel @ViewModelInject constructor(
         }
     }
 
+    fun generateFinalSelections(): MutableList<String> {
+        var finalSelections: MutableList<String> = mutableListOf()
+        marketing.value?.targetingSpecifics?.forEach { targetingSpecific ->
+            if (targetingSpecific.selected){
+                targetingSpecific.channels.forEach{ channelID ->
+                    if (selectedCampaigns.containsKey(channelID)){
+                        finalSelections.add(targetingSpecific.label + " - " + eligibleChannels
+                            ?.find { it.id == channelID }?.name + "\n " + (eligibleChannels
+                            ?.find { it.id == channelID }?.campaigns
+                            ?.find { it.selected }?.content
+                            ?: ""))
+                    }
+                }
+            }
+        }
+        return finalSelections
+    }
+
     fun generateEligibleChannels(){
         eligibleChannels = mutableSetOf()
         marketing.value?.targetingSpecifics
@@ -46,7 +64,7 @@ class MarketingViewModel @ViewModelInject constructor(
                         .let { channel ->
                             if (channel != null) {
                                 channel.campaigns.forEach { campaign ->
-                                    var st = "${campaign.price}"
+                                    var st = "${campaign.price} EURO"
                                     if (campaign.minListings > 0) {
                                         st += if (campaign.minListings == campaign.maxListings)
                                             "\n${campaign.minListings} listings"

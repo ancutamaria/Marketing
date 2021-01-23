@@ -1,14 +1,13 @@
 package com.am.marketing.view
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.am.marketing.R
-import com.am.marketing.model.TargetingSpecific
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,10 +64,10 @@ class MainActivity : AppCompatActivity() {
             R.id.goToNextFragment -> {
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, listOfFragments[++currentFragmentIndex])
                     .commit()
-                if (currentFragmentIndex == listOfFragments.size - 1){
-//                    nextMenuItem.visibility = View.INVISIBLE
+                if (currentFragmentIndex == listOfFragments.size - 2){
                     nextMenuItem.setTitle("Done")
                 }
+
                 prevMenuItem.visibility = View.VISIBLE
                 return@OnNavigationItemSelectedListener true
             }
@@ -76,10 +75,5 @@ class MainActivity : AppCompatActivity() {
         false
     }
 
-    private fun TextView.setSelectedItem(ts: TargetingSpecific) {
-        if (ts.selected)
-            setTextColor(resources.getColor(R.color.lavender_color))
-        else
-            setTextColor(resources.getColor(R.color.white))
-    }
+
 }
