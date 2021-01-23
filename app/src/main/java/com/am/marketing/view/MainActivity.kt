@@ -78,8 +78,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun TextView.setSelectedItem(ts: TargetingSpecific) {
         if (ts.selected)
-            setTextColor(resources.getColor(R.color.purple_700))
+            setTextColor(resources.getColor(R.color.lavender_color))
         else
-            setTextColor(resources.getColor(R.color.orange))
+            setTextColor(resources.getColor(R.color.white))
     }
 }

@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.am.marketing.R
@@ -90,9 +91,9 @@ class CampaignsFragment : Fragment() {
 
     private fun TextView.setSelectedItem(campaign: Campaign) {
         if (campaign.selected)
-            setTextColor(resources.getColor(R.color.purple_700))
+            setTextColor(resources.getColor(R.color.lavender_color))
         else
-            setTextColor(resources.getColor(R.color.orange))
+            setTextColor(resources.getColor(R.color.white))
     }
 
 
