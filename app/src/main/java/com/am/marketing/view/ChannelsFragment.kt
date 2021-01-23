@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
@@ -49,6 +50,7 @@ class ChannelsFragment : Fragment() {
 
     private inner class ChannelHolder(view: View): RecyclerView.ViewHolder(view){
         val channelLabel: TextView = itemView.findViewById(R.id.channel_item_label)
+        val channelCampaignSelected: ImageView = itemView.findViewById(R.id.campaign_selected)
     }
 
     private inner class ChannelsAdapter(val activity: FragmentActivity, var channels: List<Channel>)
@@ -63,6 +65,12 @@ class ChannelsFragment : Fragment() {
             holder.apply {
                 channelLabel.apply {
                     text = channel.name
+                    if (viewModel.selectedCampaigns.containsKey(channel.id)){
+                        channelCampaignSelected.visibility = View.VISIBLE
+                    } else {
+                        channelCampaignSelected.visibility = View.INVISIBLE
+                    }
+
                     setOnClickListener {
                         viewModel.selectedChannelID = channel.id
                         activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CampaignsFragment())
