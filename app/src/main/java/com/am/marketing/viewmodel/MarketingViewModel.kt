@@ -12,8 +12,11 @@ class MarketingViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     var selectedTargetings: MutableSet<Int> = mutableSetOf()
+    var selectedCampaigns: MutableMap<Int, Int> = mutableMapOf()
     var eligibleChannels: MutableSet<Channel> = mutableSetOf()
+    var selectedChannelID: Int = -1
     val marketing: LiveData<Marketing> = marketingRepository.getMarketing()
+
 
     fun addSelectedTargetedSpecifics(id: Int, newSelected: Boolean) {
         if (newSelected){
@@ -23,21 +26,45 @@ class MarketingViewModel @ViewModelInject constructor(
         }
     }
 
-    fun generateEligibleChannels(){
-        eligibleChannels = mutableSetOf()
-        for (targetingSpecific in marketing.value?.targetingSpecifics!!){
-            if (selectedTargetings.contains(targetingSpecific.id))
-                for (channelID in targetingSpecific.channels){
-                    marketing.value!!.channels
-                        .find { it.id == channelID }
-                        .also {
-                            if (it != null) {
-                                eligibleChannels.add(it)
-                            }
-                        }
-                }
-
+    fun addSelectedCampaigns(id: Int, newSelected: Boolean) {
+        if (newSelected){
+            selectedCampaigns[selectedChannelID] = id
+        } else {
+            selectedCampaigns.remove(selectedChannelID)
         }
     }
 
+    fun generateEligibleChannels(){
+        eligibleChannels = mutableSetOf()
+        marketing.value?.targetingSpecifics
+            ?.filter {
+                selectedTargetings.contains(it.id)
+            }?.forEach { targetingSpecific ->
+                targetingSpecific.channels.forEach { channelID ->
+                    marketing.value!!.channels
+                        .find { it.id == channelID }
+                        .let { channel ->
+                            if (channel != null) {
+                                channel.campaigns.forEach { campaign ->
+                                    var st = "${campaign.price}"
+                                    if (campaign.minListings > 0) {
+                                        st += if (campaign.minListings == campaign.maxListings)
+                                            "\n${campaign.minListings} listings"
+                                        else "\n${campaign.minListings}-${campaign.maxListings} listings"
+                                    }
+                                    if (campaign.optimizations >0) st += "\n${campaign.optimizations} optimisations"
+                                    campaign.benefits.forEach { benefit ->
+                                        st += "\n" + marketing.value!!.campaignsBenefits
+                                            .find { it.id == benefit }
+                                            ?.description
+                                    }
+                                    campaign.content = st
+                                }
+                                eligibleChannels?.add(channel)
+
+                            }
+                        }
+                }
+            }
+    }
 }

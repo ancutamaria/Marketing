@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.am.marketing.R
+import com.am.marketing.model.TargetingSpecific
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -74,4 +76,10 @@ class MainActivity : AppCompatActivity() {
         false
     }
 
+    private fun TextView.setSelectedItem(ts: TargetingSpecific) {
+        if (ts.selected)
+            setTextColor(resources.getColor(R.color.purple_700))
+        else
+            setTextColor(resources.getColor(R.color.orange))
+    }
 }

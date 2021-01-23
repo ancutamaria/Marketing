@@ -1,58 +1,99 @@
 package com.am.marketing.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.am.marketing.R
+import com.am.marketing.model.Campaign
+import com.am.marketing.viewmodel.MarketingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CampaignsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class CampaignsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_campaigns, container, false)
-    }
+    private lateinit var champaignsRecyclerView: RecyclerView
+    private var adapter: CampaignsAdapter? = null
+    private var checkedPosition = -1
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CampaignsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                CampaignsFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
+        fun newInstance() = ChannelsFragment()
     }
+
+    private val viewModel: MarketingViewModel by activityViewModels()
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.campaigns_fragment, container, false)
+        champaignsRecyclerView = view.findViewById(R.id.campaigns_recycler_view)
+        champaignsRecyclerView.layoutManager = LinearLayoutManager(context)
+        return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        updateUI(viewModel.eligibleChannels
+            .last() { channel ->
+                channel.id == viewModel.selectedChannelID
+            }.campaigns
+        )
+    }
+
+    private fun updateUI(campaigns: List<Campaign>) {
+        adapter = activity?.let { CampaignsAdapter(it, campaigns) }
+        champaignsRecyclerView.adapter = adapter
+    }
+
+    private inner class CampaignHolder(view: View): RecyclerView.ViewHolder(view){
+        val channelLabel: TextView = itemView.findViewById(R.id.campaign_item_label)
+    }
+
+    private inner class CampaignsAdapter(
+        val activity: FragmentActivity,
+        var campaigns: List<Campaign>
+    )
+        : RecyclerView.Adapter<CampaignHolder>(){
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CampaignHolder {
+            val view = layoutInflater.inflate(R.layout.campaigns_item, parent, false)
+            return CampaignHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: CampaignHolder, position: Int) {
+            val campaign = campaigns[position]
+            holder.apply {
+                channelLabel.apply {
+                    text = campaign.content
+                    setOnClickListener {
+                        campaign.selected = !campaign.selected
+                        viewModel.addSelectedCampaigns(campaign.id, campaign.selected)
+                        setSelectedItem(campaign)
+                    }
+                    setSelectedItem(campaign)
+                }
+            }
+
+        }
+
+        override fun getItemCount() = campaigns.size
+
+
+    }
+
+    private fun TextView.setSelectedItem(campaign: Campaign) {
+        if (campaign.selected)
+            setTextColor(resources.getColor(R.color.purple_700))
+        else
+            setTextColor(resources.getColor(R.color.orange))
+    }
+
+
 }

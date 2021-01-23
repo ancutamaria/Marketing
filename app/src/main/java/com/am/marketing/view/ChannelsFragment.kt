@@ -1,13 +1,12 @@
 package com.am.marketing.view
 
-import android.content.Intent
 import android.os.Bundle
-import android.provider.SyncStateContract
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ChannelsFragment : Fragment() {
 
-    private lateinit var tsRecyclerView: RecyclerView
+    private lateinit var channelsRecyclerView: RecyclerView
     private var adapter: ChannelsAdapter? = null
 
     companion object {
@@ -32,8 +31,8 @@ class ChannelsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.channels_fragment, container, false)
-        tsRecyclerView = view.findViewById(R.id.targeting_specifics_recycler_view)
-        tsRecyclerView.layoutManager = LinearLayoutManager(context)
+        channelsRecyclerView = view.findViewById(R.id.channels_recycler_view)
+        channelsRecyclerView.layoutManager = LinearLayoutManager(context)
         return view
     }
 
@@ -44,15 +43,15 @@ class ChannelsFragment : Fragment() {
     }
 
     private fun updateUI(mutableSet: MutableSet<Channel>) {
-        adapter = ChannelsAdapter(mutableSet.toList())
-        tsRecyclerView.adapter = adapter
+        adapter = activity?.let { ChannelsAdapter(it, mutableSet.toList()) }
+        channelsRecyclerView.adapter = adapter
     }
 
     private inner class ChannelHolder(view: View): RecyclerView.ViewHolder(view){
         val channelLabel: TextView = itemView.findViewById(R.id.channel_item_label)
     }
 
-    private inner class ChannelsAdapter(var channels: List<Channel>)
+    private inner class ChannelsAdapter(val activity: FragmentActivity, var channels: List<Channel>)
         : RecyclerView.Adapter<ChannelHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelHolder {
             val view = layoutInflater.inflate(R.layout.channels_item, parent, false)
@@ -65,15 +64,14 @@ class ChannelsFragment : Fragment() {
                 channelLabel.apply {
                     text = channel.name
                     setOnClickListener {
-                        val intent = Intent(activity, CampaignsFragment::class.java).apply {
-                            putExtra("channelid", channel.id)
+                        viewModel.selectedChannelID = channel.id
+                        activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CampaignsFragment())
+                                .commit()
                         }
-                        startActivity(intent)
                     }
                 }
 
             }
-        }
 
         override fun getItemCount() = channels.size
     }
