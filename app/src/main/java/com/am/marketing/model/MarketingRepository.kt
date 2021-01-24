@@ -11,16 +11,17 @@ class MarketingRepository @Inject constructor(
     val apiService: MarketingAPIService
 ){
 
-    fun getMarketing(): LiveData<Marketing>{
-        val data = MutableLiveData<Marketing>()
+    fun getMarketing(): LiveData<MarketingResponse<Marketing>>{
+        val marketingResponse = MutableLiveData<MarketingResponse<Marketing>>()
         apiService.getMarketing().enqueue(object : Callback<Marketing> {
             override fun onResponse(call: Call<Marketing>, response: Response<Marketing>) {
-                data.value = response.body()
+                val responseTmp: Marketing? = response.body()
+                marketingResponse.value = MarketingResponse.OK(responseTmp)
             }
             override fun onFailure(call: Call<Marketing>, t: Throwable) {
-                TODO()
+                marketingResponse.value = MarketingResponse.Error("Error on trying to access REST: \n ${t.message}")
             }
         })
-        return data
+        return marketingResponse
     }
 }

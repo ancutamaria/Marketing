@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.am.marketing.R
+import com.am.marketing.model.MarketingResponse
 import com.am.marketing.model.TargetingSpecific
 import com.am.marketing.viewmodel.MarketingViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,8 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class TargetingSpecificsFragment : Fragment() {
 
     private lateinit var tsRecyclerView: RecyclerView
-    private var adapter: TSAdapter? = null
-    private lateinit var targetingSpecifics: List<TargetingSpecific>
+    private var tsAdapter: TSAdapter? = null
     private lateinit var nextButton: FloatingActionButton
 
     private val viewModel: MarketingViewModel by activityViewModels()
@@ -46,27 +46,37 @@ class TargetingSpecificsFragment : Fragment() {
                     ?.replace(R.id.fragment_container, ChannelsFragment())
                     ?.commit()
             }
-
         }
-
-
         return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.marketing.observe(viewLifecycleOwner){
-            targetingSpecifics = it.targetingSpecifics
-            updateUI(targetingSpecifics, viewModel.selectedTargetings)
+        viewModel.marketing.observe(viewLifecycleOwner){ response ->
+            when (response) {
+                is MarketingResponse.OK -> {
+                    updateUI(response.data?.targetingSpecifics, viewModel.selectedTargetings)
+                }
+                is MarketingResponse.Error -> {
+                    AlertDialog.Builder(requireContext(), R.style.AlertDialogCustom)
+                        .setMessage(response.message)
+                        .setPositiveButton("OK") { _,_ -> }
+                        .create()
+                        .show()
+                }
+            }
+
         }
     }
 
-    private fun updateUI(targetingSpecifics: List<TargetingSpecific>, mutableSet: MutableSet<Int>) {
-        for (targeting in targetingSpecifics){
-            targeting.selected = mutableSet.contains(targeting.id)
+    private fun updateUI(targetingSpecifics: List<TargetingSpecific>?, mutableSet: MutableSet<Int>) {
+        if (targetingSpecifics != null) {
+            for (targeting in targetingSpecifics){
+                targeting.selected = mutableSet.contains(targeting.id)
+            }
+            tsAdapter = TSAdapter(targetingSpecifics)
+            tsRecyclerView.adapter = tsAdapter
         }
-        adapter = TSAdapter(targetingSpecifics)
-        tsRecyclerView.adapter = adapter
     }
 
     private inner class TSHolder(view: View): RecyclerView.ViewHolder(view){
