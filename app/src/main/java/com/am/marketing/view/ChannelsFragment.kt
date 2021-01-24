@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.am.marketing.R
 import com.am.marketing.model.Channel
 import com.am.marketing.viewmodel.MarketingViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +24,7 @@ class ChannelsFragment : Fragment() {
 
     private lateinit var channelsRecyclerView: RecyclerView
     private var adapter: ChannelsAdapter? = null
-    private lateinit var nextButton: Button
+    private lateinit var nextButton: FloatingActionButton
 
     private val viewModel: MarketingViewModel by activityViewModels()
 
@@ -32,11 +34,18 @@ class ChannelsFragment : Fragment() {
         channelsRecyclerView = view.findViewById(R.id.channels_recycler_view)
         nextButton = view.findViewById(R.id.channels_next_button)
         nextButton.setOnClickListener{
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.fragment_container, ReviewFragment())
-                ?.commit()
+            if  (viewModel.selectedCampaigns.isEmpty()){
+                AlertDialog.Builder(requireContext(), R.style.AlertDialogCustom)
+                    .setMessage("Please select at least one option to proceed")
+                    .setPositiveButton("OK") { _,_ -> }
+                    .create()
+                    .show()
+            } else {
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.fragment_container, ReviewFragment())
+                    ?.commit()
+            }
         }
-        nextButton.isEnabled = viewModel.selectedCampaigns.isNotEmpty()
         channelsRecyclerView.layoutManager = LinearLayoutManager(context)
         return view
     }

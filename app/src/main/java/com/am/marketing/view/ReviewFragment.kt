@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.am.marketing.R
 import com.am.marketing.viewmodel.MarketingViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,11 +23,7 @@ class ReviewFragment : Fragment() {
 
     private lateinit var reviewRecyclerView: RecyclerView
     private var adapter: ReviewAdapter? = null
-    private lateinit var sendMailButton: Button
-
-    companion object {
-        fun newInstance() = ChannelsFragment()
-    }
+    private lateinit var sendMailButton: FloatingActionButton
 
     private val viewModel: MarketingViewModel by activityViewModels()
 
@@ -96,7 +93,7 @@ class ReviewFragment : Fragment() {
         activity?.startActivity(Intent.createChooser(emailIntent, "Send feedback to XYZ"))
     }
 
-    fun formatContent(content: List<String>): String{
+    private fun formatContent(content: List<String>): String{
         var result = "Hello there,\nThese are the droids you're looking for!\n\n"
         content.forEach {
             result += it + "\n\n"

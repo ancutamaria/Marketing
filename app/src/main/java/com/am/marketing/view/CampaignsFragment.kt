@@ -5,15 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.am.marketing.R
 import com.am.marketing.model.Campaign
 import com.am.marketing.viewmodel.MarketingViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,14 +22,9 @@ class CampaignsFragment : Fragment() {
 
     private lateinit var champaignsRecyclerView: RecyclerView
     private var adapter: CampaignsAdapter? = null
-    private lateinit var prevButton: Button
-
-    companion object {
-        fun newInstance() = ChannelsFragment()
-    }
+    private lateinit var prevButton: FloatingActionButton
 
     private val viewModel: MarketingViewModel by activityViewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,16 +52,16 @@ class CampaignsFragment : Fragment() {
     }
 
     private fun updateUI(campaigns: List<Campaign>) {
-        adapter = activity?.let { CampaignsAdapter(it, campaigns) }
+        adapter = CampaignsAdapter(campaigns)
         champaignsRecyclerView.adapter = adapter
     }
 
     private inner class CampaignHolder(view: View): RecyclerView.ViewHolder(view){
         val channelLabel: TextView = itemView.findViewById(R.id.campaign_item_label)
+        val campaignSelected: ImageView = itemView.findViewById(R.id.campaign_selected)
     }
 
     private inner class CampaignsAdapter(
-        val activity: FragmentActivity,
         var campaigns: List<Campaign>
     )
         : RecyclerView.Adapter<CampaignHolder>(){
@@ -92,15 +88,14 @@ class CampaignsFragment : Fragment() {
 
         override fun getItemCount() = campaigns.size
 
-
     }
 
-    private fun TextView.setSelectedItem(campaign: Campaign) {
-        if (campaign.selected)
-            setTextColor(resources.getColor(R.color.mustard_color))
-        else
-            setTextColor(resources.getColor(R.color.white))
+    private fun CampaignHolder.setSelectedItem(campaign: Campaign) {
+        if (campaign.selected) {
+            campaignSelected.visibility = View.VISIBLE
+        } else {
+            campaignSelected.visibility = View.INVISIBLE
+        }
     }
-
 
 }
