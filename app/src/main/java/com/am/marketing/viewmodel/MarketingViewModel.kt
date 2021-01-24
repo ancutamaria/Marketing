@@ -18,6 +18,13 @@ class MarketingViewModel @ViewModelInject constructor(
     var eligibleChannels: MutableSet<Channel> = mutableSetOf()
     var selectedChannelID: Int = -1
 
+
+    fun resetAll(){
+        selectedTargetings = mutableSetOf()
+        selectedCampaigns = mutableMapOf()
+        eligibleChannels = mutableSetOf()
+        selectedChannelID = -1
+    }
     fun addSelectedTargetedSpecifics(id: Int, newSelected: Boolean) {
         if (newSelected){
             selectedTargetings.add(id)

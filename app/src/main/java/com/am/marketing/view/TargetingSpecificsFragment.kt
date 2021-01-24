@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ class TargetingSpecificsFragment : Fragment() {
     private lateinit var tsRecyclerView: RecyclerView
     private var adapter: TSAdapter? = null
     private lateinit var targetingSpecifics: List<TargetingSpecific>
+    private lateinit var nextButton: Button
 
     companion object {
         fun newInstance() = TargetingSpecificsFragment()
@@ -31,6 +33,12 @@ class TargetingSpecificsFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.targeting_specifics_fragment, container, false)
         tsRecyclerView = view.findViewById(R.id.targeting_specifics_recycler_view)
+        nextButton = view.findViewById(R.id.targeting_specifics_next_button)
+        nextButton.setOnClickListener{
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.fragment_container, ChannelsFragment())
+                ?.commit()
+        }
         tsRecyclerView.layoutManager = LinearLayoutManager(context)
         return view
     }
@@ -70,6 +78,7 @@ class TargetingSpecificsFragment : Fragment() {
                     setOnClickListener {
                         ts.selected = !ts.selected
                         viewModel.addSelectedTargetedSpecifics(ts.id, ts.selected)
+                        nextButton.isEnabled = viewModel.selectedTargetings.size != 0
                         setSelectedItem(ts)
                     }
                     setSelectedItem(ts)
@@ -83,7 +92,7 @@ class TargetingSpecificsFragment : Fragment() {
 
     private fun TextView.setSelectedItem(ts: TargetingSpecific) {
         if (ts.selected)
-            setTextColor(resources.getColor(R.color.lavender_color))
+            setTextColor(resources.getColor(R.color.mustard_color))
         else
             setTextColor(resources.getColor(R.color.white))
     }

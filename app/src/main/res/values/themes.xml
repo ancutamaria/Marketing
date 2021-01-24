@@ -2,14 +2,11 @@
     <!-- Base application theme. -->
     <style name="Theme.Marketing" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/grape_color</item>
-        <item name="colorPrimaryVariant">@color/grape_color</item>
-        <item name="colorOnPrimary">@color/lavender_color</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/grape_color</item>
-        <item name="colorSecondaryVariant">@color/grape_color</item>
-        <item name="colorOnSecondary">@color/grape_color</item>
+        <item name="colorPrimary">@color/mustard_color</item>
+        <item name="colorPrimaryVariant">@color/mustard_color</item>
+        <item name="colorOnPrimary">@color/mustard_color</item>
         <!-- Status bar color. -->
+        <item name="android:textColorPrimary">@color/white</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
@@ -31,14 +28,4 @@
         <item name="elevation">10dp</item>
     </style>
 
-
-    <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <style name="BottomNavigationViewPadding">
-        <item name="android:textAlignment">center</item>
-        <item name="android:paddingTop">15dp</item>
-        <item name="android:paddingBottom">30dp</item>
-    </style>
 </resources>

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
@@ -21,18 +22,21 @@ class ChannelsFragment : Fragment() {
 
     private lateinit var channelsRecyclerView: RecyclerView
     private var adapter: ChannelsAdapter? = null
-
-    companion object {
-        fun newInstance() = ChannelsFragment()
-    }
+    private lateinit var nextButton: Button
 
     private val viewModel: MarketingViewModel by activityViewModels()
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.channels_fragment, container, false)
         channelsRecyclerView = view.findViewById(R.id.channels_recycler_view)
+        nextButton = view.findViewById(R.id.channels_next_button)
+        nextButton.setOnClickListener{
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.fragment_container, ReviewFragment())
+                ?.commit()
+        }
+        nextButton.isEnabled = viewModel.selectedCampaigns.isNotEmpty()
         channelsRecyclerView.layoutManager = LinearLayoutManager(context)
         return view
     }
@@ -75,7 +79,7 @@ class ChannelsFragment : Fragment() {
                         viewModel.selectedChannelID = channel.id
                         activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CampaignsFragment())
                                 .commit()
-                        }
+                    }
                     }
                 }
 

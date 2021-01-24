@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -20,6 +21,7 @@ class CampaignsFragment : Fragment() {
 
     private lateinit var champaignsRecyclerView: RecyclerView
     private var adapter: CampaignsAdapter? = null
+    private lateinit var prevButton: Button
 
     companion object {
         fun newInstance() = ChannelsFragment()
@@ -35,6 +37,12 @@ class CampaignsFragment : Fragment() {
         val view = inflater.inflate(R.layout.campaigns_fragment, container, false)
         champaignsRecyclerView = view.findViewById(R.id.campaigns_recycler_view)
         champaignsRecyclerView.layoutManager = LinearLayoutManager(context)
+        prevButton = view.findViewById(R.id.campaigns_prev_button)
+        prevButton.setOnClickListener{
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.fragment_container, ChannelsFragment())
+                ?.commit()
+        }
         return view
     }
 
@@ -89,7 +97,7 @@ class CampaignsFragment : Fragment() {
 
     private fun TextView.setSelectedItem(campaign: Campaign) {
         if (campaign.selected)
-            setTextColor(resources.getColor(R.color.lavender_color))
+            setTextColor(resources.getColor(R.color.mustard_color))
         else
             setTextColor(resources.getColor(R.color.white))
     }

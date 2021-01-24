@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -21,6 +22,7 @@ class ReviewFragment : Fragment() {
 
     private lateinit var reviewRecyclerView: RecyclerView
     private var adapter: ReviewAdapter? = null
+    private lateinit var sendMailButton: Button
 
     companion object {
         fun newInstance() = ChannelsFragment()
@@ -35,6 +37,14 @@ class ReviewFragment : Fragment() {
         val view = inflater.inflate(R.layout.review_fragment, container, false)
         reviewRecyclerView = view.findViewById(R.id.review_recycler_view)
         reviewRecyclerView.layoutManager = LinearLayoutManager(context)
+        sendMailButton = view.findViewById(R.id.send_email_button)
+        sendMailButton.setOnClickListener{
+            sendEmail(viewModel.generateFinalSelections())
+            viewModel.resetAll()
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.fragment_container, TargetingSpecificsFragment())
+                ?.commit()
+        }
         return view
     }
 
@@ -67,9 +77,6 @@ class ReviewFragment : Fragment() {
             holder.apply {
                 finalSelectionLabel.apply {
                     text = campaign
-                    setOnClickListener {
-                        sendEmail(finalSelections)
-                    }
                 }
             }
 
@@ -83,14 +90,14 @@ class ReviewFragment : Fragment() {
         selectorIntent.data = Uri.parse("mailto:")
         val emailIntent = Intent(Intent.ACTION_SEND)
         emailIntent.putExtra(Intent.EXTRA_EMAIL, "ancuta.maria@gmail.com")
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Send marketing selections")
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Marketing selections")
         emailIntent.putExtra(Intent.EXTRA_TEXT, formatContent(content))
         emailIntent.selector = selectorIntent
         activity?.startActivity(Intent.createChooser(emailIntent, "Send feedback to XYZ"))
     }
 
     fun formatContent(content: List<String>): String{
-        var result = "Hello,\nThese are the droids you're looking for!\n\n"
+        var result = "Hello there,\nThese are the droids you're looking for!\n\n"
         content.forEach {
             result += it + "\n\n"
         }

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/goToPrevFragment"
-        android:title="Prev"/>
-    <item android:id="@+id/goToNextFragment"
-        android:title="Next"/>
-</menu>
