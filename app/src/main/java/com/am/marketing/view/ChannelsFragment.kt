@@ -1,14 +1,13 @@
 package com.am.marketing.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -78,7 +77,7 @@ class ChannelsFragment : Fragment() {
             holder.apply {
                 channelLabel.apply {
                     text = channel.name
-                    if (viewModel.selectedCampaigns?.value!!.containsKey(channel.id)){
+                    if (viewModel.selectedCampaigns.value!!.containsKey(channel.id)){
                         channelCampaignSelected.visibility = View.VISIBLE
                     } else {
                         channelCampaignSelected.visibility = View.INVISIBLE

@@ -6,10 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,7 +49,7 @@ class ReviewFragment : Fragment() {
     }
 
     private fun updateUI(finalSelections: List<String>) {
-        adapter = activity?.let { ReviewAdapter(it, finalSelections) }
+        adapter = activity?.let { ReviewAdapter(finalSelections) }
         reviewRecyclerView.adapter = adapter
     }
 
@@ -60,7 +58,6 @@ class ReviewFragment : Fragment() {
     }
 
     private inner class ReviewAdapter(
-        val activity: FragmentActivity,
         var finalSelections: List<String>
     )
         : RecyclerView.Adapter<ReviewHolder>(){
@@ -81,12 +78,12 @@ class ReviewFragment : Fragment() {
         override fun getItemCount() = finalSelections.size
     }
 
-    fun sendEmail(content: List<String>) {
+    private fun sendEmail(content: List<String>) {
 
         val selectorIntent = Intent(Intent.ACTION_SENDTO)
         selectorIntent.data = Uri.parse("mailto:")
         val emailIntent = Intent(Intent.ACTION_SEND)
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, "ancuta.maria@gmail.com")
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("ancuta.maria@gmail.com"))
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Marketing selections")
         emailIntent.putExtra(Intent.EXTRA_TEXT, formatContent(content))
         emailIntent.selector = selectorIntent

@@ -41,12 +41,12 @@ class MarketingViewModel @ViewModelInject constructor(
     fun addSelectedCampaigns(id: Int, newSelected: Boolean) {
 
         if (newSelected) {
-            var tmpSelectedCampaigns = selectedCampaigns
+            val tmpSelectedCampaigns = selectedCampaigns
             tmpSelectedCampaigns.value?.set(selectedChannelID, id)
-            eligibleChannels.last() { channel ->
+            eligibleChannels.last { channel ->
                 channel.id == selectedChannelID
             }
-                ?.campaigns?.forEach { campaign ->
+                .campaigns.forEach { campaign ->
                     if (campaign.id == id) campaign.selected = newSelected else campaign.selected =
                         false
                 }
@@ -57,18 +57,18 @@ class MarketingViewModel @ViewModelInject constructor(
     }
 
     fun generateFinalSelections(): MutableList<String> {
-        var finalSelections: MutableList<String> = mutableListOf()
+        val finalSelections: MutableList<String> = mutableListOf()
         when (marketing.value) {
             is MarketingResponse.OK -> {
-                (marketing.value as MarketingResponse.OK<Marketing>)?.data?.targetingSpecifics
+                (marketing.value as MarketingResponse.OK<Marketing>).data?.targetingSpecifics
                     ?.forEach { targetingSpecific ->
                         if (targetingSpecific.selected) {
                             targetingSpecific.channels.forEach { channelID ->
                                 if (selectedCampaigns.value?.containsKey(channelID)!!) {
                                     finalSelections.add(
                                         targetingSpecific.label + " - " + eligibleChannels
-                                            ?.find { it.id == channelID }?.name + "\n " + (eligibleChannels
-                                            ?.find { it.id == channelID }?.campaigns
+                                            .find { it.id == channelID }?.name + "\n " + (eligibleChannels
+                                                .find { it.id == channelID }?.campaigns
                                             ?.find { it.selected }?.content
                                             ?: "")) } } } } } }
         return finalSelections
@@ -76,13 +76,13 @@ class MarketingViewModel @ViewModelInject constructor(
 
     fun generateEligibleChannels(){
         eligibleChannels = mutableSetOf()
-        var marketingOK = marketing.value as MarketingResponse.OK<Marketing>
-        marketingOK?.data?.targetingSpecifics
+        val marketingOK = marketing.value as MarketingResponse.OK<Marketing>
+        marketingOK.data?.targetingSpecifics
             ?.filter {
                 selectedTargetings.contains(it.id)
             }?.forEach { targetingSpecific ->
                 targetingSpecific.channels.forEach { channelID ->
-                    marketingOK?.data?.channels
+                    marketingOK.data?.channels
                         ?.find { it.id == channelID }
                         .let { channel ->
                             channel?.campaigns?.forEach { campaign ->
@@ -94,14 +94,14 @@ class MarketingViewModel @ViewModelInject constructor(
                                 }
                                 if (campaign.optimizations >0) st += "\n${campaign.optimizations} optimisations"
                                 campaign.benefits.forEach { benefit ->
-                                    st += "\n" + marketingOK?.data?.campaignsBenefits
+                                    st += "\n" + marketingOK.data?.campaignsBenefits
                                         ?.find { it.id == benefit }
                                         ?.description
                                 }
                                 campaign.content = st
                             }
                             if (channel != null)
-                                eligibleChannels?.add(channel)
+                                eligibleChannels.add(channel)
 
                         }
                 }

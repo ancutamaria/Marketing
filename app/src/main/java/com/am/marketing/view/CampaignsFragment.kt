@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CampaignsFragment : Fragment() {
 
-    private lateinit var champaignsRecyclerView: RecyclerView
+    private lateinit var campaignsRecyclerView: RecyclerView
     private var adapter: CampaignsAdapter? = null
     private lateinit var prevButton: FloatingActionButton
 
@@ -30,8 +30,8 @@ class CampaignsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.campaigns_fragment, container, false)
-        champaignsRecyclerView = view.findViewById(R.id.campaigns_recycler_view)
-        champaignsRecyclerView.layoutManager = LinearLayoutManager(context)
+        campaignsRecyclerView = view.findViewById(R.id.campaigns_recycler_view)
+        campaignsRecyclerView.layoutManager = LinearLayoutManager(context)
         prevButton = view.findViewById(R.id.campaigns_prev_button)
         prevButton.setOnClickListener{
             activity?.supportFragmentManager?.beginTransaction()
@@ -52,7 +52,7 @@ class CampaignsFragment : Fragment() {
     private fun updateUICall() {
         updateUI(
             viewModel.eligibleChannels
-                .last() { channel ->
+                .last { channel ->
                     channel.id == viewModel.selectedChannelID
                 }.campaigns
         )
@@ -60,7 +60,7 @@ class CampaignsFragment : Fragment() {
 
     private fun updateUI(campaigns: List<Campaign>) {
         adapter = CampaignsAdapter(campaigns)
-        champaignsRecyclerView.adapter = adapter
+        campaignsRecyclerView.adapter = adapter
     }
 
     private inner class CampaignHolder(view: View): RecyclerView.ViewHolder(view){

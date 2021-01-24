@@ -5,8 +5,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical"
-    android:layout_weight="0.6" >
+    android:orientation="vertical" >
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/targeting_specifics_next_button"
@@ -25,7 +24,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/targeting_specifics_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:layout_gravity="center"
         />
 

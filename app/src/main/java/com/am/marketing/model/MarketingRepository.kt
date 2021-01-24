@@ -8,7 +8,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class MarketingRepository @Inject constructor(
-    val apiService: MarketingAPIService
+    private val apiService: MarketingAPIService
 ){
 
     fun getMarketing(): LiveData<MarketingResponse<Marketing>>{
