@@ -2,6 +2,7 @@ package com.am.marketing.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.am.marketing.model.Channel
 import com.am.marketing.model.Marketing
@@ -12,16 +13,17 @@ class MarketingViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     val marketing: LiveData<Marketing> = marketingRepository.getMarketing()
+    var selectedCampaigns: MutableLiveData<MutableMap<Int, Int>>
+            = MutableLiveData<MutableMap<Int, Int>>(mutableMapOf())
 
     var selectedTargetings: MutableSet<Int> = mutableSetOf()
-    var selectedCampaigns: MutableMap<Int, Int> = mutableMapOf()
     var eligibleChannels: MutableSet<Channel> = mutableSetOf()
     var selectedChannelID: Int = -1
 
 
     fun resetAll(){
         selectedTargetings = mutableSetOf()
-        selectedCampaigns = mutableMapOf()
+        selectedCampaigns = MutableLiveData<MutableMap<Int, Int>>(mutableMapOf())
         eligibleChannels = mutableSetOf()
         selectedChannelID = -1
     }
@@ -34,10 +36,18 @@ class MarketingViewModel @ViewModelInject constructor(
     }
 
     fun addSelectedCampaigns(id: Int, newSelected: Boolean) {
+
         if (newSelected){
-            selectedCampaigns[selectedChannelID] = id
+            var tmpSelectedCampaigns = selectedCampaigns
+            tmpSelectedCampaigns.value?.set(selectedChannelID, id)
+            eligibleChannels.last() {channel ->
+                channel.id == selectedChannelID }
+                ?.campaigns?.forEach { campaign ->
+                    if (campaign.id == id) campaign.selected = newSelected else campaign.selected = false
+                }
+            selectedCampaigns.value = tmpSelectedCampaigns.value
         } else {
-            selectedCampaigns.remove(selectedChannelID)
+            selectedCampaigns.value?.remove(selectedChannelID)
         }
     }
 
@@ -46,7 +56,7 @@ class MarketingViewModel @ViewModelInject constructor(
         marketing.value?.targetingSpecifics?.forEach { targetingSpecific ->
             if (targetingSpecific.selected){
                 targetingSpecific.channels.forEach{ channelID ->
-                    if (selectedCampaigns.containsKey(channelID)){
+                    if (selectedCampaigns.value?.containsKey(channelID)!!){
                         finalSelections.add(targetingSpecific.label + " - " + eligibleChannels
                             ?.find { it.id == channelID }?.name + "\n " + (eligibleChannels
                             ?.find { it.id == channelID }?.campaigns
@@ -69,8 +79,7 @@ class MarketingViewModel @ViewModelInject constructor(
                     marketing.value!!.channels
                         .find { it.id == channelID }
                         .let { channel ->
-                            if (channel != null) {
-                                channel.campaigns.forEach { campaign ->
+                                channel?.campaigns?.forEach { campaign ->
                                     var st = "${campaign.price} EURO"
                                     if (campaign.minListings > 0) {
                                         st += if (campaign.minListings == campaign.maxListings)
@@ -85,9 +94,9 @@ class MarketingViewModel @ViewModelInject constructor(
                                     }
                                     campaign.content = st
                                 }
-                                eligibleChannels?.add(channel)
+                                if (channel != null)
+                                    eligibleChannels?.add(channel)
 
-                            }
                         }
                 }
             }

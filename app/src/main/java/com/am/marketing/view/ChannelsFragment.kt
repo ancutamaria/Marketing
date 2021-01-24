@@ -34,7 +34,7 @@ class ChannelsFragment : Fragment() {
         channelsRecyclerView = view.findViewById(R.id.channels_recycler_view)
         nextButton = view.findViewById(R.id.channels_next_button)
         nextButton.setOnClickListener{
-            if  (viewModel.selectedCampaigns.isEmpty()){
+            if  (viewModel.selectedCampaigns.value?.isEmpty()!!){
                 AlertDialog.Builder(requireContext(), R.style.AlertDialogCustom)
                     .setMessage("Please select at least one option to proceed")
                     .setPositiveButton("OK") { _,_ -> }
@@ -78,7 +78,7 @@ class ChannelsFragment : Fragment() {
             holder.apply {
                 channelLabel.apply {
                     text = channel.name
-                    if (viewModel.selectedCampaigns.containsKey(channel.id)){
+                    if (viewModel.selectedCampaigns?.value!!.containsKey(channel.id)){
                         channelCampaignSelected.visibility = View.VISIBLE
                     } else {
                         channelCampaignSelected.visibility = View.INVISIBLE

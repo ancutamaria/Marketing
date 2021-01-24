@@ -44,10 +44,18 @@ class CampaignsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        updateUI(viewModel.eligibleChannels
-            .last() { channel ->
-                channel.id == viewModel.selectedChannelID
-            }.campaigns
+        viewModel.selectedCampaigns.observe(viewLifecycleOwner){
+            updateUICall()
+        }
+        updateUICall()
+    }
+
+    private fun updateUICall() {
+        updateUI(
+            viewModel.eligibleChannels
+                .last() { channel ->
+                    channel.id == viewModel.selectedChannelID
+                }.campaigns
         )
     }
 
@@ -80,6 +88,7 @@ class CampaignsFragment : Fragment() {
                         viewModel.addSelectedCampaigns(campaign.id, campaign.selected)
                         setSelectedItem(campaign)
                     }
+//                    println("!!!!!!!!!!!!!!!!is selected ${campaign.selected}")
                     setSelectedItem(campaign)
                 }
             }
