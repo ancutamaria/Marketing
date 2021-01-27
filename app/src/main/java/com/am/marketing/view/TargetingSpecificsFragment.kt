@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.am.marketing.R
 import com.am.marketing.model.MarketingResponse
-import com.am.marketing.model.TargetingSpecific
+import com.am.marketing.model.data.TargetingSpecific
 import com.am.marketing.viewmodel.MarketingViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint

@@ -38,6 +38,7 @@
 
                 />
             <ImageView
+                android:id="@+id/go_to_campaigns_button"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:adjustViewBounds="true"

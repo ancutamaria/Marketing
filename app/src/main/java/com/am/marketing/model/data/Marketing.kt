@@ -1,4 +1,4 @@
-package com.am.marketing.model
+package com.am.marketing.model.data
 
 
 data class Marketing(

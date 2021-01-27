@@ -13,7 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.am.marketing.R
-import com.am.marketing.model.Channel
+import com.am.marketing.model.data.Channel
 import com.am.marketing.viewmodel.MarketingViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,6 +63,7 @@ class ChannelsFragment : Fragment() {
     private inner class ChannelHolder(view: View): RecyclerView.ViewHolder(view){
         val channelLabel: TextView = itemView.findViewById(R.id.channel_item_label)
         val channelCampaignSelected: ImageView = itemView.findViewById(R.id.campaign_selected)
+        val goToCampaignsButton: ImageView = itemView.findViewById(R.id.go_to_campaigns_button)
     }
 
     private inner class ChannelsAdapter(val activity: FragmentActivity, var channels: List<Channel>)
@@ -84,14 +85,25 @@ class ChannelsFragment : Fragment() {
                     }
 
                     setOnClickListener {
-                        viewModel.selectedChannelID = channel.id
-                        activity.supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CampaignsFragment())
-                                .commit()
-                    }
+                        goToCampaigns(channel)
                     }
                 }
-
+                goToCampaignsButton.apply {
+                    setOnClickListener {
+                        goToCampaigns(channel)
+                    }
+                }
             }
+
+
+        }
+
+        private fun goToCampaigns(channel: Channel) {
+            viewModel.selectedChannelID = channel.id
+            activity.supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, CampaignsFragment())
+                .commit()
+        }
 
         override fun getItemCount() = channels.size
     }
